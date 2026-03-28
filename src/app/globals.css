@@ -132,4 +132,13 @@
   .pulse-glow:focus-within {
     box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.2);
   }
+  .glass {
+    @apply bg-white/70 backdrop-blur-lg border border-white/20;
+  }
+  .glass-dark {
+    @apply bg-black/40 backdrop-blur-lg border border-white/10;
+  }
+  .shadow-premium {
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+  }
 }
