@@ -4,6 +4,7 @@ import Script from "next/script";
 import { TempoInit } from "@/components/tempo-init";
 import { ThemeProvider } from "@/components/theme-provider";
 import ChatbotWidget from "@/components/chatbot-widget";
+import HeaderAdWrapper from "@/components/header-ad-wrapper";
 
 export const metadata: Metadata = {
   title: "alfamus.com — Find Your Dream Job | AI-Powered Job Aggregator",
@@ -26,6 +27,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* AdSense Top Header Ad Unit - Conditional display */}
+          <HeaderAdWrapper />
           {children}
           <ChatbotWidget />
         </ThemeProvider>
@@ -36,12 +39,12 @@ export default function RootLayout({
           async
           defer
         />
-        {/* Google AdSense Script - Asynchronous loading for better performance and compliance */}
+        {/* Google AdSense Script - Auto ads on every page */}
         <Script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxxxxx"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7011484437531877"
           crossOrigin="anonymous"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
         />
       </body>
     </html>

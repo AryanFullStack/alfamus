@@ -44,12 +44,18 @@ export default async function AdminPage() {
     .order("created_at", { ascending: false })
     .limit(10);
 
+  const { data: adUnits } = await supabase
+    .from("ad_units")
+    .select("*")
+    .order("created_at", { ascending: true });
+
   return (
     <AdminDashboardClient
       user={user}
       stats={{ totalJobs: totalJobs ?? 0, totalPosts: totalPosts ?? 0, totalSubscribers: totalSubscribers ?? 0 }}
       recentJobs={recentJobs ?? []}
       recentPosts={recentPosts ?? []}
+      initialAdUnits={adUnits ?? []}
     />
   );
 }

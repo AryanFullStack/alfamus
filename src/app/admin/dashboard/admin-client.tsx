@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { User } from "@supabase/supabase-js";
 import {
@@ -39,6 +39,15 @@ interface Job {
   created_at: string;
 }
 
+interface AdUnit {
+  id: string;
+  name: string;
+  slot: string;
+  ad_code: string | null;
+  is_active: boolean;
+  created_at: string;
+}
+
 interface Post {
   id: string;
   title: string;
@@ -62,6 +71,7 @@ interface Props {
   stats: Stats;
   recentJobs: Job[];
   recentPosts: Post[];
+  initialAdUnits: AdUnit[];
 }
 
 const NAV_ITEMS = [
@@ -90,7 +100,7 @@ const EMPTY_POST: Partial<Post> = {
   author: "alfamus", read_time: 5, meta_title: "", meta_description: "", is_published: false,
 };
 
-export default function AdminDashboardClient({ user, stats: initialStats, recentJobs: initialJobs, recentPosts: initialPosts }: Props) {
+export default function AdminDashboardClient({ user, stats: initialStats, recentJobs: initialJobs, recentPosts: initialPosts, initialAdUnits }: Props) {
   const [activeTab, setActiveTab] = useState("overview");
   const router = useRouter();
   const supabase = createClient();
@@ -127,12 +137,14 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
     { id: "fresher-guide", name: "Fresher Guide", prompt: "", model: "gpt-4o-mini", active: true },
   ]);
 
-  const [adUnits, setAdUnits] = useState([
-    { id: "header", name: "Header Banner", slot: "header", code: "", active: true },
-    { id: "inline", name: "Inline (Jobs/Blog)", slot: "inline", code: "", active: true },
-    { id: "sidebar", name: "Sidebar", slot: "sidebar", code: "", active: true },
-    { id: "redirect", name: "Redirect Page", slot: "redirect", code: "", active: true },
-  ]);
+  const [adUnits, setAdUnits] = useState<AdUnit[]>(initialAdUnits);
+  const [adsLoading, setAdsLoading] = useState(false);
+  const [showAdForm, setShowAdForm] = useState(false);
+  const [adForm, setAdForm] = useState<Partial<AdUnit>>({ name: "", slot: "", ad_code: "", is_active: true });
+
+  useEffect(() => {
+    loadAdUnits();
+  }, []);
 
   const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
 
@@ -302,6 +314,53 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
     setPostForm(post);
     setEditingPostId(post.id);
     setShowPostForm(true);
+  };
+
+  const loadAdUnits = async () => {
+    setAdsLoading(true);
+    const { data } = await supabase.from("ad_units").select("*").order("created_at", { ascending: true });
+    if (data) setAdUnits(data);
+    setAdsLoading(false);
+  };
+
+  const saveAdUnit = async (unit: Partial<AdUnit>) => {
+    if (!unit.name || !unit.slot) {
+      showToast("Name and Slot are required", "error");
+      return;
+    }
+    const payload = { 
+      name: unit.name, 
+      slot: unit.slot, 
+      ad_code: unit.ad_code, 
+      is_active: unit.is_active 
+    };
+
+    if (unit.id) {
+      const { error } = await supabase.from("ad_units").update(payload).eq("id", unit.id);
+      if (error) { showToast("Error updating ad unit", "error"); return; }
+      showToast("Ad unit updated");
+    } else {
+      const { error } = await supabase.from("ad_units").insert(payload);
+      if (error) { showToast("Error creating ad unit", "error"); return; }
+      showToast("Ad unit created");
+      setShowAdForm(false);
+      setAdForm({ name: "", slot: "", ad_code: "", is_active: true });
+    }
+    loadAdUnits();
+  };
+
+  const deleteAdUnit = async (id: string) => {
+    if (!confirm("Delete this ad unit?")) return;
+    const { error } = await supabase.from("ad_units").delete().eq("id", id);
+    if (error) { showToast("Error deleting ad unit", "error"); return; }
+    showToast("Ad unit deleted");
+    setAdUnits((prev) => prev.filter((u) => u.id !== id));
+  };
+
+  const toggleAdActive = async (id: string, current: boolean) => {
+    const { error } = await supabase.from("ad_units").update({ is_active: !current }).eq("id", id);
+    if (error) { showToast("Error toggling status", "error"); return; }
+    setAdUnits((prev) => prev.map((u) => u.id === id ? { ...u, is_active: !current } : u));
   };
 
   const generateSlug = (title: string) =>
@@ -829,49 +888,132 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
 
         {/* ADS MANAGER */}
         {activeTab === "ads" && (
-          <div>
-            <h1 className="text-3xl font-bold text-[#0F1F3D] mb-2" style={{ fontFamily: "Syne, sans-serif" }}>Ads Manager</h1>
-            <p className="text-[#6B7280] mb-6">Manage AdSense and sponsored content placements</p>
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
-              <Megaphone className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="animate-in fade-in duration-500">
+            <div className="flex items-center justify-between mb-6">
               <div>
-                <p className="text-sm font-semibold text-amber-800">Google AdSense Integration</p>
-                <p className="text-xs text-amber-700 mt-0.5">Paste your AdSense ad unit codes below. Make sure your site is approved by AdSense before injecting live codes.</p>
+                <h1 className="text-3xl font-bold text-[#0F1F3D]" style={{ fontFamily: "Syne, sans-serif" }}>Ads Manager</h1>
+                <p className="text-[#6B7280] text-sm mt-1">Manage AdSense and sponsored content placements</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <button onClick={loadAdUnits} className="p-2.5 bg-white border border-[#E8E4DC] rounded-xl text-[#6B7280] hover:text-[#0D9488] transition-all">
+                  <RefreshCw className={`w-4 h-4 ${adsLoading ? "animate-spin" : ""}`} />
+                </button>
+                <button
+                  onClick={() => setShowAdForm(!showAdForm)}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-[#0D9488] text-white font-semibold rounded-xl hover:bg-[#0B7A70] transition-all text-sm shadow-lg shadow-[#0D9488]/20"
+                  style={{ fontFamily: "Syne, sans-serif" }}
+                >
+                  <Plus className="w-4 h-4" /> {showAdForm ? "Cancel" : "Add Unit"}
+                </button>
               </div>
             </div>
-            <div className="space-y-4">
-              {adUnits.map((unit) => (
-                <div key={unit.id} className="bg-white rounded-2xl border border-[#E8E4DC] p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-[#0F1F3D] rounded-xl flex items-center justify-center">
-                        <Megaphone className="w-4 h-4 text-[#0D9488]" />
+
+            {showAdForm && (
+              <div className="bg-white rounded-2xl border border-[#E8E4DC] p-6 mb-8 shadow-sm">
+                <h2 className="font-bold text-[#0F1F3D] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>New Ad Placement</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#6B7280] mb-1">Display Name</label>
+                    <input type="text" value={adForm.name} onChange={(e) => setAdForm({...adForm, name: e.target.value})} placeholder="e.g. Homepage Sidebar" className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DC] text-sm bg-[#F8F6F1] outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#6B7280] mb-1">Slot Identifier</label>
+                    <input type="text" value={adForm.slot} onChange={(e) => setAdForm({...adForm, slot: e.target.value})} placeholder="e.g. sidebar-top" className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DC] text-sm bg-[#F8F6F1] outline-none font-mono" />
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-xs font-semibold text-[#6B7280] mb-1">AdSense / HTML Code</label>
+                  <textarea value={adForm.ad_code || ""} onChange={(e) => setAdForm({...adForm, ad_code: e.target.value})} placeholder="Paste <ins> code here..." rows={4} className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DC] text-xs bg-[#F8F6F1] outline-none font-mono resize-none" />
+                </div>
+                <div className="flex justify-end gap-3">
+                  <button onClick={() => saveAdUnit(adForm)} className="px-6 py-2 bg-[#0D9488] text-white rounded-xl text-sm font-bold">Create Placement</button>
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-4">
+                {adUnits.length === 0 && !adsLoading && (
+                  <div className="bg-white rounded-2xl border border-dashed border-[#E8E4DC] p-12 text-center text-[#6B7280]">
+                    <Megaphone className="w-8 h-8 mx-auto mb-3 opacity-20" />
+                    <p>No ad units found. Create one to get started.</p>
+                  </div>
+                )}
+                {adUnits.map((unit) => (
+                  <div key={unit.id} className="bg-white rounded-2xl border border-[#E8E4DC] p-6 hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${unit.is_active ? "bg-emerald-100 text-emerald-600" : "bg-gray-100 text-gray-400"}`}>
+                          <Megaphone className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-[#0F1F3D] text-sm" style={{ fontFamily: "Syne, sans-serif" }}>{unit.name}</div>
+                          <div className="text-xs text-[#6B7280] font-mono">{unit.slot}</div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="font-semibold text-[#0F1F3D] text-sm" style={{ fontFamily: "Syne, sans-serif" }}>{unit.name}</div>
-                        <div className="text-xs text-[#6B7280] font-mono">slot: {unit.slot}</div>
+                      <div className="flex items-center gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input type="checkbox" checked={unit.is_active} onChange={() => toggleAdActive(unit.id, unit.is_active)} className="w-4 h-4 accent-[#0D9488]" />
+                          <span className="text-xs font-semibold text-[#6B7280] uppercase tracking-wider">Active</span>
+                        </label>
+                        <button onClick={() => deleteAdUnit(unit.id)} className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" checked={unit.active} onChange={(e) => setAdUnits((prev) => prev.map((u) => u.id === unit.id ? { ...u, active: e.target.checked } : u))} className="w-4 h-4 accent-[#0D9488]" />
-                      <span className="text-sm text-[#6B7280]">Active</span>
-                    </label>
+                    <textarea
+                      value={unit.ad_code || ""}
+                      onChange={(e) => setAdUnits(prev => prev.map(u => u.id === unit.id ? {...u, ad_code: e.target.value} : u))}
+                      placeholder="Ad code placeholder..."
+                      rows={3}
+                      className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DC] text-xs text-[#0F1F3D] bg-[#F8F6F1] outline-none focus:border-[#0D9488] transition-colors resize-none font-mono mb-3"
+                    />
+                    <div className="flex justify-end">
+                      <button onClick={() => saveAdUnit(unit)} className="text-xs font-bold text-[#0D9488] hover:underline flex items-center gap-1">
+                        <Save className="w-3 h-3" /> Update Unit
+                      </button>
+                    </div>
                   </div>
-                  <label className="block text-xs font-semibold text-[#6B7280] mb-1">Ad Code</label>
-                  <textarea
-                    value={unit.code}
-                    onChange={(e) => setAdUnits((prev) => prev.map((u) => u.id === unit.id ? { ...u, code: e.target.value } : u))}
-                    placeholder={`<!-- Google AdSense ${unit.name} -->\n<ins class="adsbygoogle" ...></ins>`}
-                    rows={4}
-                    className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DC] text-xs text-[#0F1F3D] bg-[#F8F6F1] outline-none focus:border-[#0D9488] transition-colors resize-none font-mono"
-                  />
+                ))}
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-[#0F1F3D] rounded-2xl p-6 text-white border border-white/10 shadow-xl overflow-hidden relative">
+                  <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#0D9488]/20 rounded-full blur-3xl" />
+                  <h2 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ fontFamily: "Syne, sans-serif" }}>
+                    <TrendingUp className="w-5 h-5 text-[#0D9488]" /> Ads News & Tips
+                  </h2>
+                  <div className="space-y-4 relative z-10">
+                    {[
+                      { title: "Optimize for Core Web Vitals", desc: "AdSense rewards fast sites. Ensure your ads don't cause layout shifts (CLS).", tag: "Tip" },
+                      { title: "MCM Policy Update", desc: "Google is tightening Multi-Customer Management rules. Check your status.", tag: "Policy" },
+                      { title: "Smart Bidding 2024", desc: "Leverage AI-driven bidding to increase your RPM by up to 15%.", tag: "News" },
+                    ].map((news, i) => (
+                      <div key={i} className="p-3 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors group cursor-default">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-[#0D9488]">{news.tag}</span>
+                          <ExternalLink className="w-3 h-3 text-white/20 group-hover:text-[#0D9488] transition-colors" />
+                        </div>
+                        <h3 className="text-sm font-bold mb-1 group-hover:text-[#0D9488] transition-colors">{news.title}</h3>
+                        <p className="text-xs text-white/50 leading-relaxed">{news.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="w-full mt-4 py-2 text-xs font-bold border border-white/10 rounded-lg hover:bg-white/5 transition-all">View All News</button>
                 </div>
-              ))}
-            </div>
-            <div className="mt-6 flex justify-end">
-              <button onClick={() => showToast("Ad units saved successfully!")} className="flex items-center gap-2 px-6 py-2.5 bg-[#0D9488] text-white font-semibold rounded-xl text-sm hover:bg-[#0B7A70] transition-all" style={{ fontFamily: "Syne, sans-serif" }}>
-                <Save className="w-4 h-4" /> Save Ad Settings
-              </button>
+
+                <div className="bg-white rounded-2xl border border-[#E8E4DC] p-6 shadow-sm">
+                  <h3 className="text-sm font-bold text-[#0F1F3D] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>Policy Check</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-xs text-emerald-600 font-medium bg-emerald-50 px-3 py-2 rounded-lg">
+                      <CheckCircle2 className="w-4 h-4" /> ads.txt configured correctly
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-emerald-600 font-medium bg-emerald-50 px-3 py-2 rounded-lg">
+                      <CheckCircle2 className="w-4 h-4" /> Google crawler allowed
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

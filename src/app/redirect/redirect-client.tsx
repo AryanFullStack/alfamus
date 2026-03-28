@@ -6,6 +6,7 @@ import { createClient } from "../../../supabase/client";
 import { Briefcase, ExternalLink, Shield } from "lucide-react";
 import Link from "next/link";
 import CloudflareTurnstile from "@/components/cloudflare-turnstile";
+import AdUnit from "@/components/ad-unit";
 
 export default function RedirectClient() {
   const searchParams = useSearchParams();
@@ -85,15 +86,10 @@ export default function RedirectClient() {
       </Link>
 
       <div className="bg-white rounded-3xl border border-[#E8E4DC] p-8 max-w-md w-full text-center shadow-xl">
-        {/* Ad slot at the top - ensures it loads first and is clearly visible */}
-        <div className="bg-[#F8F6F1] rounded-xl border border-[#E8E4DC] p-4 mb-8 relative min-h-[100px] flex flex-col items-center justify-center">
+        {/* Real AdSense Ad Unit for Redirect Page */}
+        <div className="bg-[#F8F6F1] rounded-xl border border-[#E8E4DC] p-4 mb-8 relative min-h-[120px] flex flex-col items-center justify-center">
           <span className="absolute top-1.5 right-2 text-[10px] text-[#9CA3AF] font-mono uppercase tracking-tighter">Advertisement</span>
-          <div className="text-center">
-            <p className="text-xs text-[#6B7280] mb-1">Sponsored Content</p>
-            <div className="h-10 flex items-center justify-center text-[10px] text-[#9CA3AF] italic">
-              Google AdSense will appear here
-            </div>
-          </div>
+          <AdUnit slot="1931348788" />
         </div>
 
         <div className="mb-6">
