@@ -101,7 +101,8 @@ export default function SiteFooter() {
                 { label: "Browse Jobs", href: "/jobs" },
                 { label: "Blog", href: "/blog" },
                 { label: "Career Tools", href: "/career-tools" },
-                { label: "Companies", href: "/companies" },
+                { label: "About Us", href: "/about" },
+                { label: "Contact Us", href: "/contact" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="text-white/60 hover:text-white text-sm transition-colors">
@@ -143,9 +144,10 @@ export default function SiteFooter() {
             <ul className="space-y-3">
               {[
                 { label: "Privacy Policy", href: "/privacy" },
-                { label: "Terms of Use", href: "/terms" },
+                { label: "Terms & Conditions", href: "/terms" },
                 { label: "Disclaimer", href: "/disclaimer" },
                 { label: "Cookie Policy", href: "/cookies" },
+                { label: "Advertise With Us", href: "/advertise" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="text-white/60 hover:text-white text-sm transition-colors">

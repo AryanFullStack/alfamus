@@ -60,6 +60,8 @@ export default function SiteNavbar() {
               { label: "Jobs", href: "/jobs" },
               { label: "Blog", href: "/blog" },
               { label: "Career Tools", href: "/career-tools" },
+              { label: "About", href: "/about" },
+              { label: "Contact", href: "/contact" },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -131,6 +133,8 @@ export default function SiteNavbar() {
               { label: "Jobs", href: "/jobs" },
               { label: "Blog", href: "/blog" },
               { label: "Career Tools", href: "/career-tools" },
+              { label: "About", href: "/about" },
+              { label: "Contact", href: "/contact" },
             ].map((item) => (
               <Link
                 key={item.href}
