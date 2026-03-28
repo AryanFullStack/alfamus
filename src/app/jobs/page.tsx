@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
-import ChatbotWidget from "@/components/chatbot-widget";
 import JobsPageClient from "./jobs-client";
 
 export const metadata = {
@@ -19,7 +18,6 @@ export default function JobsPage() {
         </Suspense>
       </div>
       <SiteFooter />
-      <ChatbotWidget />
     </div>
   );
 }

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Search, MapPin, TrendingUp } from "lucide-react";
 
 const TRENDING_TAGS = [
+  "Unskilled Roles",
+  "Healthcare",
   "React Developer",
   "Data Scientist",
   "Product Manager",

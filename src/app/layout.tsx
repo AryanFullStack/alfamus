@@ -3,6 +3,7 @@ import "./globals.css";
 import Script from "next/script";
 import { TempoInit } from "@/components/tempo-init";
 import { ThemeProvider } from "@/components/theme-provider";
+import ChatbotWidget from "@/components/chatbot-widget";
 
 export const metadata: Metadata = {
   title: "alfamus.com — Find Your Dream Job | AI-Powered Job Aggregator",
@@ -18,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -26,8 +27,22 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <ChatbotWidget />
         </ThemeProvider>
         <TempoInit />
+        {/* Cloudflare Turnstile Script - Anti-bot protection */}
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          async
+          defer
+        />
+        {/* Google AdSense Script - Asynchronous loading for better performance and compliance */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxxxxx"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );

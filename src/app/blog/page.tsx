@@ -17,9 +17,10 @@ export default async function BlogPage() {
     .from("blog_posts")
     .select("id, title, slug, excerpt, featured_image, category, read_time, published_at, author")
     .eq("is_published", true)
+    .is("deleted_at", null)
     .order("published_at", { ascending: false });
 
-  const categories = [...new Set(posts?.map((p) => p.category) ?? [])];
+  const categories = Array.from(new Set(posts?.map((p) => p.category) ?? []));
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>

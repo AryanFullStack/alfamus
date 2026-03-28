@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Twitter, Linkedin, Github, Instagram, Briefcase, ArrowRight } from "lucide-react";
+import { Twitter, Linkedin, Github, Instagram, Briefcase, ArrowRight, ShieldCheck } from "lucide-react";
 import { createClient } from "../../supabase/client";
+import CloudflareTurnstile from "./cloudflare-turnstile";
 
 export default function SiteFooter() {
   const [email, setEmail] = useState("");
@@ -158,9 +159,16 @@ export default function SiteFooter() {
 
         {/* Bottom */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/40 text-sm">
-            © {currentYear} alfamus.com. All rights reserved.
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <p className="text-white/40 text-sm">
+              © {currentYear} alfamus.com. All rights reserved.
+            </p>
+            <CloudflareTurnstile 
+              theme="dark" 
+              size="flexible" 
+              className="opacity-60 hover:opacity-100 transition-opacity" 
+            />
+          </div>
           <div className="flex items-center gap-4">
             {[
               { Icon: Twitter, href: "#", label: "Twitter" },

@@ -111,17 +111,31 @@ export default function ChatbotWidget() {
     setIsTyping(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("supabase-functions-ai-chat", {
-        body: {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
           profile: selectedProfile,
-        },
+        }),
       });
 
-      if (error || !data?.response) throw new Error("No response");
+      if (!res.ok) {
+        let errMessage = "Network response was not ok";
+        try {
+          const errData = await res.json();
+          errMessage = errData.error || errMessage;
+        } catch(e) {}
+        throw new Error(errMessage);
+      }
+      
+      const data = await res.json();
+      
+      if (data.error || !data.response) throw new Error(data.error || "No response");
 
       setMessages((prev) => [...prev, { role: "assistant", content: data.response }]);
-    } catch {
+    } catch (err) {
+      console.error(err);
       // Fallback to canned responses
       const responses = CANNED_RESPONSES[selectedProfile] || [];
       const response = responses[Math.floor(Math.random() * responses.length)] ||
@@ -151,13 +165,13 @@ export default function ChatbotWidget() {
       {/* Floating button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-[#6366F1] to-[#8B5CF6] shadow-2xl flex items-center justify-center hover:scale-110 transition-all text-white relative"
+        className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-[100] w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-[#6366F1] to-[#8B5CF6] shadow-2xl flex items-center justify-center hover:scale-110 transition-all text-white group"
         aria-label="Open AI Chat"
         style={{ boxShadow: "0 8px 32px rgba(99,102,241,0.4)" }}
       >
-        {open ? <X className="w-6 h-6" /> : <Sparkles className="w-5 h-5" />}
+        {open ? <X className="w-6 h-6" /> : <Sparkles className="w-5 h-5 md:w-6 md:h-6" />}
         {!open && (
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#0D9488] rounded-full border-2 border-white text-white text-[8px] font-bold flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 md:-top-1 md:-right-1 w-5 h-5 bg-[#0D9488] rounded-full border-2 border-white text-white text-[9px] font-bold flex items-center justify-center shadow-sm">
             AI
           </span>
         )}
@@ -166,8 +180,8 @@ export default function ChatbotWidget() {
       {/* Chat panel */}
       {open && (
         <div
-          className="fixed bottom-24 right-6 z-50 w-80 md:w-96 rounded-2xl bg-white shadow-2xl border border-[#E8E4DC] overflow-hidden flex flex-col"
-          style={{ maxHeight: "580px", animation: "slideUpChat 0.25s ease-out" }}
+          className="fixed bottom-20 right-4 left-4 md:left-auto md:bottom-28 md:right-8 z-[100] md:w-[400px] rounded-2xl bg-white shadow-2xl border border-[#E8E4DC] overflow-hidden flex flex-col"
+          style={{ maxHeight: "calc(100vh - 6rem)", height: "80vh", animation: "slideUpChat 0.25s ease-out" }}
         >
           {/* Header */}
           <div className="bg-gradient-to-r from-[#0F1F3D] via-[#162B52] to-[#0F1F3D] px-4 py-3 flex items-center justify-between flex-shrink-0">

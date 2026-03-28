@@ -84,13 +84,6 @@ export default function SiteNavbar() {
               </button>
             )}
 
-            <Link
-              href="/admin"
-              className="hidden md:inline-flex px-4 py-2 text-sm font-semibold text-white bg-[#0F1F3D] rounded-lg hover:bg-[#0D9488] transition-all"
-              style={{ fontFamily: "Syne, sans-serif" }}
-            >
-              Admin
-            </Link>
 
             <button
               className="md:hidden p-2 rounded-lg text-[#0F1F3D] hover:bg-[#F8F6F1] transition-all"
@@ -110,7 +103,6 @@ export default function SiteNavbar() {
               { label: "Jobs", href: "/jobs" },
               { label: "Blog", href: "/blog" },
               { label: "Career Tools", href: "/career-tools" },
-              { label: "Admin", href: "/admin" },
             ].map((item) => (
               <Link
                 key={item.href}

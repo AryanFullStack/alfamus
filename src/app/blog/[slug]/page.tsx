@@ -20,6 +20,7 @@ export default async function BlogPostPage({ params }: Props) {
     .select("*")
     .eq("slug", slug)
     .eq("is_published", true)
+    .is("deleted_at", null)
     .single();
 
   if (!post) notFound();
@@ -29,6 +30,7 @@ export default async function BlogPostPage({ params }: Props) {
     .from("blog_posts")
     .select("id, title, slug, featured_image, category, read_time")
     .eq("is_published", true)
+    .is("deleted_at", null)
     .eq("category", post.category)
     .neq("id", post.id)
     .limit(3);

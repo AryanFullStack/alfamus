@@ -10,6 +10,17 @@ export default async function AdminPage() {
     redirect("/sign-in");
   }
 
+  // Verify admin role
+  const { data: userData } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (userData?.role !== "admin") {
+    redirect("/dashboard");
+  }
+
   // Fetch stats
   const [
     { count: totalJobs },

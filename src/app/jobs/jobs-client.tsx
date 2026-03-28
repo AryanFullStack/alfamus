@@ -17,10 +17,11 @@ interface Job {
   category: string;
   description: string | null;
   source_platform: string | null;
+  featured_image: string | null;
 }
 
 const JOB_TYPES = ["All Types", "Full-time", "Remote", "Contract", "Part-time"];
-const CATEGORIES = ["All Categories", "Tech", "Design", "Marketing", "Finance", "Data Science", "Engineering"];
+const CATEGORIES = ["All Categories", "Unskilled", "Care giver", "Truck", "Healthcare", "Tech", "Design", "Marketing", "Finance", "Data Science", "Engineering"];
 const SALARY_RANGES = [
   { label: "Any", min: 0, max: 0 },
   { label: "$0 – $60k", min: 0, max: 60000 },
@@ -60,7 +61,7 @@ export default function JobsPageClient() {
   const [hasMore, setHasMore] = useState(true);
   const [filterOpen, setFilterOpen] = useState(false);
   const observerRef = useRef<HTMLDivElement>(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const pageRef = useRef(0);
 
   const fetchJobs = useCallback(async (reset = false) => {
@@ -76,7 +77,7 @@ export default function JobsPageClient() {
 
     let q = supabase
       .from("jobs")
-      .select("id, title, company, company_logo, location, job_type, salary_min, salary_max, category, description, source_platform")
+      .select("id, title, company, company_logo, location, job_type, salary_min, salary_max, category, description, source_platform, featured_image")
       .eq("is_active", true)
       .range(from, to);
 
@@ -100,13 +101,35 @@ export default function JobsPageClient() {
       q = q.lte("salary_max", salaryRange.max);
     }
 
-    const { data, error } = await q;
+    // Try to order by priority_score first, fallback if column doesn't exist
+    let { data, error } = await q
+      .order("priority_score", { ascending: true })
+      .order("created_at", { ascending: false });
+
+    if (error && error.message.includes("priority_score")) {
+      console.warn("Priority score column not found. Please run the SQL migration. Falling back to default sorting.");
+      const fallbackResult = await supabase
+        .from("jobs")
+        .select("id, title, company, company_logo, location, job_type, salary_min, salary_max, category, description, source_platform, featured_image")
+        .eq("is_active", true)
+        .range(from, to)
+        .order("created_at", { ascending: false });
+      
+      data = fallbackResult.data;
+      error = fallbackResult.error;
+    }
 
     if (!error && data) {
       if (reset) {
-        setJobs(data);
+        // Deduplicate data by ID just in case the server returns duplicates
+        const uniqueData = Array.from(new Map(data.map((j) => [j.id, j])).values());
+        setJobs(uniqueData);
       } else {
-        setJobs((prev) => [...prev, ...data]);
+        setJobs((prev) => {
+          const allJobs = [...prev, ...data];
+          const uniqueJobs = Array.from(new Map(allJobs.map((j) => [j.id, j])).values());
+          return uniqueJobs;
+        });
       }
       setHasMore(data.length === 12);
       pageRef.current += 1;
@@ -118,9 +141,9 @@ export default function JobsPageClient() {
 
   // Debounced search
   useEffect(() => {
-    clearTimeout(debounceRef.current);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => fetchJobs(true), 300);
-    return () => clearTimeout(debounceRef.current);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [fetchJobs]);
 
   // Intersection observer for infinite scroll
@@ -268,47 +291,63 @@ export default function JobsPageClient() {
             {jobs.map((job, index) => (
               <div
                 key={job.id}
-                className="group bg-white rounded-2xl border border-[#E8E4DC] p-6 hover:shadow-xl hover:-translate-y-1 hover:border-[#0D9488]/30 transition-all duration-300 fade-up"
+                className="group bg-white rounded-2xl border border-[#E8E4DC] hover:shadow-xl hover:-translate-y-1 hover:border-[#0D9488]/30 transition-all duration-300 fade-up overflow-hidden flex flex-col"
                 style={{ animationDelay: `${(index % 12) * 40}ms` }}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
+                {/* Image Cover */}
+                <div className="relative h-40 w-full bg-[#F8F6F1] overflow-hidden">
+                  {job.featured_image ? (
+                    <img src={job.featured_image} alt={job.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#0F1F3D]/5 to-[#0D9488]/10" />
+                  )}
+                  {/* Company Logo Badge */}
+                  <div className="absolute -bottom-5 left-5 z-10">
                     {job.company_logo ? (
-                      <img src={job.company_logo} alt={job.company} className="w-12 h-12 rounded-xl object-cover border border-[#E8E4DC]" />
+                      <img src={job.company_logo} alt={job.company} className="w-12 h-12 rounded-xl object-cover border-2 border-white bg-white shadow-sm" />
                     ) : (
-                      <div className="w-12 h-12 rounded-xl bg-[#F8F6F1] border border-[#E8E4DC] flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-sm flex items-center justify-center">
                         <Building2 className="w-6 h-6 text-[#6B7280]" />
                       </div>
                     )}
-                    <div>
-                      <div className="text-xs text-[#6B7280] font-medium">{job.company}</div>
-                      <span className={`text-xs px-2 py-0.5 rounded-full border font-medium font-mono ${JOB_TYPE_COLORS[job.job_type] || "bg-gray-50 text-gray-600 border-gray-200"}`}>
-                        {job.job_type}
-                      </span>
+                  </div>
+                </div>
+
+                <div className="p-5 pt-8 flex-1 flex flex-col relative z-20 bg-white">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="text-xs text-[#6B7280] font-medium">{job.company}</div>
+                    <span className={`text-xs px-2 py-0.5 rounded-full border font-medium font-mono ${JOB_TYPE_COLORS[job.job_type] || "bg-gray-50 text-gray-600 border-gray-200"}`}>
+                      {job.job_type}
+                    </span>
+                  </div>
+                  
+                  <h3 className="text-lg font-bold text-[#0F1F3D] mb-2 group-hover:text-[#0D9488] transition-colors leading-tight" style={{ fontFamily: "Syne, sans-serif" }}>
+                    {job.title}
+                  </h3>
+                  
+                  {job.description && (
+                    <p className="text-sm text-[#6B7280] mb-4 line-clamp-2">{job.description}</p>
+                  )}
+                  
+                  <div className="mt-auto">
+                    <div className="flex flex-wrap gap-2 mb-5">
+                      <div className="flex items-center gap-1 text-xs text-[#6B7280] bg-[#F8F6F1] px-2 py-1 rounded-md">
+                        <MapPin className="w-3 h-3" />{job.location}
+                      </div>
+                      <div className="flex items-center gap-1 text-xs text-[#6B7280] font-mono bg-[#F8F6F1] px-2 py-1 rounded-md">
+                        <DollarSign className="w-3 h-3" />{formatSalary(job.salary_min, job.salary_max)}
+                      </div>
                     </div>
+                    
+                    <a
+                      href={`/jobs/${job.id}`}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-transparent text-[#0F1F3D] border border-[#E8E4DC] text-sm font-semibold rounded-xl group-hover:bg-[#0D9488] group-hover:text-white group-hover:border-[#0D9488] transition-all"
+                      style={{ fontFamily: "Syne, sans-serif" }}
+                    >
+                      View Details <ArrowUpRight className="w-4 h-4" />
+                    </a>
                   </div>
                 </div>
-                <h3 className="text-base font-bold text-[#0F1F3D] mb-3 group-hover:text-[#0D9488] transition-colors leading-tight" style={{ fontFamily: "Syne, sans-serif" }}>
-                  {job.title}
-                </h3>
-                {job.description && (
-                  <p className="text-xs text-[#6B7280] mb-3 line-clamp-2">{job.description}</p>
-                )}
-                <div className="flex flex-wrap gap-3 mb-5">
-                  <div className="flex items-center gap-1 text-xs text-[#6B7280]">
-                    <MapPin className="w-3 h-3" />{job.location}
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-[#6B7280] font-mono">
-                    <DollarSign className="w-3 h-3" />{formatSalary(job.salary_min, job.salary_max)}
-                  </div>
-                </div>
-                <a
-                  href={`/redirect?job=${job.id}`}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0F1F3D] text-white text-sm font-semibold rounded-xl hover:bg-[#0D9488] group-hover:bg-[#0D9488] transition-all"
-                  style={{ fontFamily: "Syne, sans-serif" }}
-                >
-                  Apply Now <ArrowUpRight className="w-4 h-4" />
-                </a>
               </div>
             ))}
           </div>

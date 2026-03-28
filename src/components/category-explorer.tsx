@@ -1,21 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Code2, BarChart2, Palette, TrendingUp, ShieldCheck, PenLine, DollarSign, Cpu, Globe, HeartPulse, GraduationCap, Wrench } from "lucide-react";
+import { Code2, BarChart2, Palette, TrendingUp, ShieldCheck, PenLine, DollarSign, Cpu, Globe, HeartPulse, GraduationCap, Wrench, Truck, UserPlus } from "lucide-react";
 
 const CATEGORIES = [
-  { label: "Tech", icon: Code2, color: "bg-blue-500", slug: "Tech" },
+  { label: "Unskilled", icon: UserPlus, color: "bg-slate-500", slug: "Unskilled" },
+  { label: "Care giver", icon: HeartPulse, color: "bg-rose-500", slug: "Care giver" },
+  { label: "Truck", icon: Truck, color: "bg-amber-600", slug: "Truck" },
+  { label: "Healthcare", icon: HeartPulse, color: "bg-emerald-500", slug: "Healthcare" },
   { label: "Marketing", icon: TrendingUp, color: "bg-pink-500", slug: "Marketing" },
   { label: "Finance", icon: DollarSign, color: "bg-emerald-500", slug: "Finance" },
-  { label: "Design", icon: Palette, color: "bg-purple-500", slug: "Design" },
   { label: "Data Science", icon: BarChart2, color: "bg-orange-500", slug: "Data Science" },
-  { label: "Security", icon: ShieldCheck, color: "bg-red-500", slug: "Security" },
-  { label: "Content", icon: PenLine, color: "bg-amber-500", slug: "Content" },
-  { label: "AI / ML", icon: Cpu, color: "bg-indigo-500", slug: "AI" },
-  { label: "Remote", icon: Globe, color: "bg-teal-500", slug: "Remote" },
-  { label: "Healthcare", icon: HeartPulse, color: "bg-rose-500", slug: "Healthcare" },
-  { label: "Education", icon: GraduationCap, color: "bg-cyan-500", slug: "Education" },
   { label: "Engineering", icon: Wrench, color: "bg-slate-500", slug: "Engineering" },
+  { label: "Tech", icon: Code2, color: "bg-blue-500", slug: "Tech" },
+  { label: "Design", icon: Palette, color: "bg-purple-500", slug: "Design" },
 ];
 
 export default function CategoryExplorer() {
