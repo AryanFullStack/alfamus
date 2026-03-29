@@ -11,6 +11,7 @@ import {
 import { createClient } from "@/supabase/client";
 import { useRouter } from "next/navigation";
 import { uploadImage } from "../../actions/cloudinary";
+import imageCompression from "browser-image-compression";
 
 interface Stats {
   totalJobs: number;
@@ -161,9 +162,29 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
 
   const handleCloudinaryUpload = async (file: File) => {
     try {
-      showToast("Uploading...", "success");
+      // 1. Check size (5MB = 5 * 1024 * 1024 bytes)
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("Image too large! Maximum limit is 5MB.", "error");
+        return null;
+      }
+
+      showToast("Compressing & Uploading...", "success");
+
+      // 2. Client-side compression
+      // Skip compression for GIFs or specific types if needed, 
+      // but browser-image-compression is generally good.
+      const options = {
+        maxSizeMB: 1, // Aim for ~1MB
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      };
+
+      const compressedFile = await imageCompression(file, options);
+
+      // 3. Upload to Cloudinary via server action
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", compressedFile, compressedFile.name);
+      
       const url = await uploadImage(formData) as string;
       if (url) {
         showToast("Upload successful!");
@@ -171,6 +192,7 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
       }
       return null;
     } catch (e) {
+      console.error("Upload error:", e);
       showToast("Upload failed", "error");
       return null;
     }
@@ -1032,6 +1054,20 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
                     ))}
                   </div>
                   <button className="w-full mt-4 py-2 text-xs font-bold border border-white/10 rounded-lg hover:bg-white/5 transition-all">View All News</button>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-[#E8E4DC] p-6 shadow-sm">
+                  <h3 className="text-sm font-bold text-[#0F1F3D] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>Slot Reference</h3>
+                  <div className="space-y-4">
+                    <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                      <div className="text-xs font-bold text-blue-700 uppercase mb-1">header_top</div>
+                      <p className="text-[11px] text-blue-600 leading-relaxed">Displays at the very top of every page (above the navbar). Best for 728x90 banners.</p>
+                    </div>
+                    <div className="p-3 bg-purple-50 rounded-xl border border-purple-100">
+                      <div className="text-xs font-bold text-purple-700 uppercase mb-1">page_bottom</div>
+                      <p className="text-[11px] text-purple-600 leading-relaxed">Displays toward the bottom of long pages (above the footer). Ideal for responsive banners.</p>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="bg-white rounded-2xl border border-[#E8E4DC] p-6 shadow-sm">

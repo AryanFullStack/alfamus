@@ -46,7 +46,6 @@ export default function SiteNavbar() {
               style={{ fontFamily: "Syne, sans-serif", fontWeight: 800 }}
             >
               alfamus
-              <span className="text-[#0D9488]">.com</span>
             </span>
           </Link>
 

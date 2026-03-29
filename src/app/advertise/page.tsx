@@ -4,9 +4,9 @@ import { TrendingUp, Users, Globe, Zap, CheckCircle, Mail } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Advertise With Us | alfamus.com",
+  title: "Advertise With Us | alfamus",
   description:
-    "Reach thousands of active job seekers, freshers, and career professionals on alfamus.com. Explore our advertising packages and partnership opportunities.",
+    "Reach thousands of active job seekers, freshers, and career professionals on alfamus. Explore our advertising packages and partnership opportunities.",
 };
 
 const stats = [
@@ -97,7 +97,7 @@ export default function AdvertisePage() {
               <span style={{ color: "#0D9488" }}>Job Seekers</span>
             </h1>
             <p className="text-white/70 text-xl max-w-2xl mx-auto leading-relaxed mb-10">
-              alfamus.com connects you with a highly engaged, career-focused audience of students,
+              alfamus connects you with a highly engaged, career-focused audience of students,
               freshers, and working professionals actively looking for their next opportunity.
             </p>
             <a
@@ -131,7 +131,7 @@ export default function AdvertisePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl font-bold text-[#0F1F3D] mb-4" style={{ fontFamily: "Fraunces, serif" }}>
-                Who Visits alfamus.com?
+                Who Visits alfamus?
               </h2>
               <p className="text-gray-500 mb-6 leading-relaxed">
                 Our audience consists of highly motivated individuals who visit the site with clear
@@ -234,7 +234,7 @@ export default function AdvertisePage() {
               Our Advertising Standards
             </h2>
             <p className="text-gray-600 mb-4 leading-relaxed">
-              alfamus.com is committed to maintaining the highest standards of advertising quality.
+              alfamus is committed to maintaining the highest standards of advertising quality.
               We comply strictly with Google AdSense Policies and only accept advertisements that meet
               our editorial standards:
             </p>

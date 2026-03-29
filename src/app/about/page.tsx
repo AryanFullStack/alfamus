@@ -4,9 +4,9 @@ import { Users, Target, Zap, Globe, Heart, Award } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us | alfamus.com — AI-Powered Job Aggregator",
+  title: "About Us | alfamus — AI-Powered Job Aggregator",
   description:
-    "Learn about alfamus.com — our mission, values, and the team behind India's fastest-growing AI-powered job aggregator helping freshers and career switchers find their dream jobs.",
+    "Learn about alfamus — our mission, values, and the team behind India's fastest-growing AI-powered job aggregator helping freshers and career switchers find their dream jobs.",
 };
 
 const stats = [
@@ -30,7 +30,7 @@ const values = [
   {
     Icon: Heart,
     title: "Fresher Friendly",
-    desc: "alfamus.com was built with freshers and career switchers in mind. We understand the unique challenges of entering the job market and provide resources, tools, and listings tailored to you.",
+    desc: "alfamus was built with freshers and career switchers in mind. We understand the unique challenges of entering the job market and provide resources, tools, and listings tailored to you.",
   },
   {
     Icon: Globe,
@@ -40,7 +40,7 @@ const values = [
   {
     Icon: Users,
     title: "Community Driven",
-    desc: "We are built by job seekers, for job seekers. Every feature, filter, and resource on alfamus.com has been shaped by real user feedback and genuine career challenges.",
+    desc: "We are built by job seekers, for job seekers. Every feature, filter, and resource on alfamus has been shaped by real user feedback and genuine career challenges.",
   },
   {
     Icon: Award,
@@ -53,19 +53,19 @@ const team = [
   {
     name: "Priya Sharma",
     role: "Head of Product",
-    bio: "Former product manager at a leading Indian startup ecosystem. Priya drives the user experience and product roadmap at alfamus.com with a deep focus on accessibility and simplicity.",
+    bio: "Former product manager at a leading Indian startup ecosystem. Priya drives the user experience and product roadmap at alfamus with a deep focus on accessibility and simplicity.",
     initials: "PS",
   },
   {
     name: "Rahul Gupta",
     role: "Lead AI Engineer",
-    bio: "Machine learning engineer with expertise in NLP and recommendation systems. Rahul architects the AI that powers job matching, smart filters, and career guidance at alfamus.com.",
+    bio: "Machine learning engineer with expertise in NLP and recommendation systems. Rahul architects the AI that powers job matching, smart filters, and career guidance at alfamus.",
     initials: "RG",
   },
   {
     name: "Sneha Verma",
     role: "Content & SEO Lead",
-    bio: "Career advisor and content strategist. Sneha ensures that every blog post, career guide, and job description on alfamus.com is accurate, helpful, and optimized for discoverability.",
+    bio: "Career advisor and content strategist. Sneha ensures that every blog post, career guide, and job description on alfamus is accurate, helpful, and optimized for discoverability.",
     initials: "SV",
   },
 ];
@@ -99,7 +99,7 @@ export default function AboutPage() {
               <span style={{ color: "#0D9488" }}>One Job at a Time</span>
             </h1>
             <p className="text-white/70 text-xl max-w-2xl mx-auto leading-relaxed">
-              alfamus.com was born out of a simple frustration — job searching
+              alfamus was born out of a simple frustration — job searching
               in India is broken. We built the platform we always wished existed.
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function AboutPage() {
           </h2>
           <div className="bg-white rounded-2xl border border-[#E8E4DC] p-8 text-gray-700 leading-relaxed space-y-4">
             <p>
-              <strong>alfamus.com</strong> is an AI-powered job aggregation platform
+              <strong>alfamus</strong> is an AI-powered job aggregation platform
               dedicated to making job search easier, faster, and smarter — especially
               for freshers, recent graduates, career switchers, and those re-entering
               the workforce.
@@ -176,7 +176,7 @@ export default function AboutPage() {
               What Drives Us
             </h2>
             <p className="text-center text-white/60 mb-14 max-w-xl mx-auto">
-              Six core principles guide every decision we make at alfamus.com.
+              Six core principles guide every decision we make at alfamus.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {values.map(({ Icon, title, desc }) => (

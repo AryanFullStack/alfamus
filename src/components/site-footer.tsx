@@ -49,7 +49,7 @@ export default function SiteFooter() {
                 className="text-xl font-bold text-white"
                 style={{ fontFamily: "Syne, sans-serif", fontWeight: 800 }}
               >
-                alfamus<span className="text-[#0D9488]">.com</span>
+                alfamus
               </span>
             </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-xs">
@@ -163,7 +163,7 @@ export default function SiteFooter() {
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <p className="text-white/40 text-sm">
-              © {currentYear} alfamus.com. All rights reserved.
+              © {currentYear} alfamus. All rights reserved.
             </p>
             <CloudflareTurnstile 
               theme="dark" 

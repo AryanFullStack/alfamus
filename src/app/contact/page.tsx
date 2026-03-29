@@ -357,7 +357,7 @@ export default function ContactPage() {
                         For Employers & Recruiters
                       </h3>
                       <p className="text-gray-500 text-sm leading-relaxed">
-                        Interested in featuring your job listings or brand on alfamus.com?
+                        Interested in featuring your job listings or brand on alfamus?
                         We offer premium placement and dedicated audience targeting.
                         Email <a href="mailto:partners@alfamus.com" className="text-[#0D9488] hover:underline">partners@alfamus.com</a>.
                       </p>

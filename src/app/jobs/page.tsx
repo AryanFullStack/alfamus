@@ -4,7 +4,7 @@ import SiteFooter from "@/components/site-footer";
 import JobsPageClient from "./jobs-client";
 
 export const metadata = {
-  title: "Browse Jobs | alfamus.com",
+  title: "Browse Jobs | alfamus",
   description: "Find your next career opportunity from thousands of curated job listings.",
 };
 

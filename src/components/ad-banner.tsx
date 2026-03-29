@@ -1,6 +1,12 @@
+"use client";
+import { useState } from "react";
+import AdUnit from "./ad-unit";
+
 export default function AdBanner() {
+  const [isVisible, setIsVisible] = useState(false);
+
   return (
-    <section className="py-8 bg-white overflow-hidden">
+    <section className={`py-8 bg-white transition-all duration-500 ${isVisible ? "block" : "hidden h-0 p-0"}`}>
       <div className="container mx-auto px-4">
         <div className="relative rounded-2xl border border-[#E8E4DC] bg-[#F8F6F1] overflow-hidden min-h-[120px] flex flex-col items-center justify-center">
           {/* AdSense labeling - strictly following policies */}
@@ -10,14 +16,11 @@ export default function AdBanner() {
             </span>
           </div>
 
-          <div className="text-center p-8">
-            <div className="inline-flex items-center gap-2 mb-3 bg-[#E8E4DC]/30 px-3 py-1 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488] animate-pulse" />
-              <p className="text-[10px] font-semibold text-[#6B7280] uppercase tracking-wider">Ad Space</p>
-            </div>
-            <p className="text-sm text-[#4B5563] italic font-medium">
-              Google ads will appear here automatically
-            </p>
+          <div className="w-full max-w-4xl mx-auto py-4">
+            <AdUnit 
+              slot="page_bottom" 
+              onStatusChange={(active) => setIsVisible(active)} 
+            />
           </div>
         </div>
       </div>

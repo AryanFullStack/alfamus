@@ -8,6 +8,7 @@ interface AdUnitProps {
   style?: React.CSSProperties;
   format?: "auto" | "fluid" | "rectangle";
   responsive?: "true" | "false";
+  onStatusChange?: (active: boolean) => void;
 }
 
 export default function AdUnit({
@@ -16,6 +17,7 @@ export default function AdUnit({
   style = { display: "block" },
   format = "auto",
   responsive = "true",
+  onStatusChange,
 }: AdUnitProps) {
   const adInited = useRef(false);
   const [adData, setAdData] = useState<{ is_active: boolean, ad_code: string | null } | null>(null);
@@ -30,13 +32,16 @@ export default function AdUnit({
           .eq("slot", slot)
           .maybeSingle();
         
-        setAdData(data || { is_active: true, ad_code: null });
+        const active = data?.is_active ?? false;
+        setAdData({ is_active: active, ad_code: data?.ad_code || null });
+        if (onStatusChange) onStatusChange(active);
       } catch (e) {
-        setAdData({ is_active: true, ad_code: null });
+        setAdData({ is_active: false, ad_code: null });
+        if (onStatusChange) onStatusChange(false);
       }
     }
     checkStatus();
-  }, [slot, supabase]);
+  }, [slot, supabase, onStatusChange]);
 
   useEffect(() => {
     // Only initialize once per mount and if active (only for default AdSense)

@@ -3,9 +3,10 @@ import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
 import Link from "next/link";
 import { Clock, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 
 export const metadata = {
-  title: "Career Blog | alfamus.com",
+  title: "Career Blog | alfamus",
   description: "Career tips, interview guides, and job search strategies for job seekers.",
 };
 
@@ -79,10 +80,13 @@ export default async function BlogPage() {
                 >
                   <div className="relative h-52 overflow-hidden bg-[#F8F6F1]">
                     {post.featured_image ? (
-                      <img
+                      <Image
                         src={post.featured_image}
                         alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority={true} // Priority for top posts
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-[#0F1F3D] to-[#0D9488]" />

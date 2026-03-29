@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Clock, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 
 interface BlogPost {
   id: string;
@@ -53,10 +54,12 @@ export default function BlogPreviewSection({ posts }: BlogPreviewSectionProps) {
               {/* Featured image */}
               <div className="relative h-48 overflow-hidden bg-[#F8F6F1]">
                 {post.featured_image ? (
-                  <img
+                  <Image
                     src={post.featured_image}
                     alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-[#0F1F3D] to-[#0D9488]" />

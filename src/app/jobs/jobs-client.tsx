@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Search, MapPin, Filter, X, Building2, ArrowUpRight, DollarSign, Clock } from "lucide-react";
 import { createClient } from "../../../supabase/client";
+import Image from "next/image";
 
 interface Job {
   id: string;
@@ -297,14 +298,30 @@ export default function JobsPageClient() {
                 {/* Image Cover */}
                 <div className="relative h-40 w-full bg-[#F8F6F1] overflow-hidden">
                   {job.featured_image ? (
-                    <img src={job.featured_image} alt={job.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <Image 
+                      src={job.featured_image} 
+                      alt={job.title} 
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      loading={index < 3 ? "eager" : "lazy"}
+                      priority={index < 3}
+                    />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-[#0F1F3D]/5 to-[#0D9488]/10" />
                   )}
                   {/* Company Logo Badge */}
                   <div className="absolute -bottom-5 left-5 z-10">
                     {job.company_logo ? (
-                      <img src={job.company_logo} alt={job.company} className="w-12 h-12 rounded-xl object-cover border-2 border-white bg-white shadow-sm" />
+                      <div className="relative w-12 h-12 rounded-xl border-2 border-white bg-white shadow-sm overflow-hidden">
+                        <Image 
+                          src={job.company_logo} 
+                          alt={job.company} 
+                          fill
+                          className="object-cover"
+                          sizes="48px"
+                        />
+                      </div>
                     ) : (
                       <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-sm flex items-center justify-center">
                         <Building2 className="w-6 h-6 text-[#6B7280]" />

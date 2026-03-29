@@ -4,6 +4,7 @@ import SiteFooter from "@/components/site-footer";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Clock, ArrowLeft, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 
 export const revalidate = 60;
 
@@ -42,10 +43,12 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Hero image */}
         <div className="relative h-72 md:h-96 overflow-hidden bg-[#0F1F3D]">
           {post.featured_image && (
-            <img
+            <Image
               src={post.featured_image}
               alt={post.title}
-              className="w-full h-full object-cover opacity-60"
+              fill
+              className="object-cover opacity-60"
+              priority
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0F1F3D] to-transparent" />
@@ -149,9 +152,15 @@ export default async function BlogPostPage({ params }: Props) {
                     href={`/blog/${related.slug}`}
                     className="group bg-white rounded-2xl overflow-hidden border border-[#E8E4DC] hover:shadow-lg hover:-translate-y-1 transition-all"
                   >
-                    <div className="h-36 overflow-hidden bg-[#F8F6F1]">
+                    <div className="relative h-36 overflow-hidden bg-[#F8F6F1]">
                       {related.featured_image ? (
-                        <img src={related.featured_image} alt={related.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <Image 
+                          src={related.featured_image} 
+                          alt={related.title} 
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-[#0F1F3D] to-[#0D9488]" />
                       )}

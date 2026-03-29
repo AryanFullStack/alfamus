@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight, CheckCircle2, Calculator, FileText, BookOpen, Target, TrendingUp, Briefcase, Clock, Star } from "lucide-react";
 
 export const metadata = {
-  title: "Career Tools | alfamus.com",
+  title: "Career Tools | alfamus",
   description: "Free career tools for job seekers — resume checker, salary calculator, interview prep guides, and more.",
 };
 
