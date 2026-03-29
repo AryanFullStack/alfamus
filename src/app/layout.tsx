@@ -13,11 +13,21 @@ export const metadata: Metadata = {
   keywords: "jobs, job search, career, freshers, remote work, tech jobs, AI jobs",
 };
 
-export default function RootLayout({
+import { createClient } from "@/supabase/server";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient();
+  const { data: GA_ID_DATA } = await supabase
+    .from("seo_settings")
+    .select("value")
+    .eq("key", "google_analytics_id")
+    .single();
+  const GA_ID = GA_ID_DATA?.value || "G-HCXK6J4CG1";
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
@@ -46,6 +56,23 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        {/* Google Analytics Script */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   );

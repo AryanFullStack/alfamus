@@ -8,7 +8,7 @@ import {
   Users, Eye, Edit, Trash2, Save, X, Bot, Megaphone, Search, ExternalLink,
   Globe, RefreshCw, Monitor, TrendingUp, Image as ImageIcon, Lock, Shield, RotateCcw
 } from "lucide-react";
-import { createClient } from "../../../../supabase/client";
+import { createClient } from "@/supabase/client";
 import { useRouter } from "next/navigation";
 import { uploadImage } from "../../actions/cloudinary";
 
@@ -144,6 +144,7 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
 
   useEffect(() => {
     loadAdUnits();
+    loadSeoSettings();
   }, []);
 
   const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
@@ -361,6 +362,37 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
     const { error } = await supabase.from("ad_units").update({ is_active: !current }).eq("id", id);
     if (error) { showToast("Error toggling status", "error"); return; }
     setAdUnits((prev) => prev.map((u) => u.id === id ? { ...u, is_active: !current } : u));
+  };
+
+  const loadSeoSettings = async () => {
+    const { data } = await supabase.from("seo_settings").select("*");
+    if (data) {
+      const settings = { ...seoSettings };
+      data.forEach((item) => {
+        if (item.key in settings) {
+          settings[item.key] = item.value || "";
+        }
+      });
+      setSeoSettings(settings);
+    }
+  };
+
+  const saveSeoSettings = async () => {
+    setSeoSaving(true);
+    try {
+      const updates = Object.entries(seoSettings).map(([key, value]) => ({
+        key,
+        value,
+        updated_at: new Date().toISOString(),
+      }));
+      const { error } = await supabase.from("seo_settings").upsert(updates, { onConflict: "key" });
+      if (error) throw error;
+      showToast("SEO settings saved!");
+    } catch (e) {
+      showToast("Error saving SEO settings", "error");
+    } finally {
+      setSeoSaving(false);
+    }
   };
 
   const generateSlug = (title: string) =>
@@ -1139,8 +1171,9 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
               </div>
               <div className="flex justify-end">
                 <button
-                  onClick={() => { setSeoSaving(true); setTimeout(() => { setSeoSaving(false); showToast("SEO settings saved!"); }, 800); }}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-[#0D9488] text-white font-semibold rounded-xl text-sm hover:bg-[#0B7A70] transition-all"
+                  onClick={saveSeoSettings}
+                  disabled={seoSaving}
+                  className="flex items-center gap-2 px-6 py-2.5 bg-[#0D9488] text-white font-semibold rounded-xl text-sm hover:bg-[#0B7A70] transition-all disabled:opacity-50"
                   style={{ fontFamily: "Syne, sans-serif" }}
                 >
                   <Save className="w-4 h-4" /> {seoSaving ? "Saving..." : "Save SEO Settings"}
