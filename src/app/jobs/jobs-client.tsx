@@ -359,7 +359,11 @@ export default function JobsPageClient() {
                       <div className="flex items-center gap-1 text-xs text-[#6B7280] font-mono bg-[#F8F6F1] px-2 py-1 rounded-md">
                         <DollarSign className="w-3 h-3" />{formatSalary(job.salary_min, job.salary_max)}
                       </div>
+                      <div className="flex items-center gap-1 text-xs text-[#6B7280] font-mono bg-[#F8F6F1] px-2 py-1 rounded-md">
+                        <Clock className="w-3 h-3" /> 5 hours ago
+                      </div>
                     </div>
+
                     
                     <a
                       href={`/jobs/${job.id}`}

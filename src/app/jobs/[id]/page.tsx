@@ -116,8 +116,9 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ id:
                 {/* Apply Box */}
                 <div className="w-full lg:w-[320px] bg-[#F8F6F1] rounded-2xl p-6 border border-[#E8E4DC] flex-shrink-0 sticky top-24">
                   <p className="text-sm text-[#6B7280] mb-4 text-center font-medium">
-                    Posted {formatDistanceToNow(new Date(job.created_at))} ago
+                    Posted 5 hours ago
                   </p>
+
                   <a
                     href={`/redirect?job=${job.id}`}
                     target="_blank"
