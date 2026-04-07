@@ -14,7 +14,9 @@ export default function HeaderAdWrapper() {
     pathname?.startsWith("/auth") || 
     pathname?.startsWith("/sign-in") || 
     pathname?.startsWith("/sign-up") ||
-    pathname?.startsWith("/dashboard");
+    pathname?.startsWith("/dashboard") ||
+    pathname?.startsWith("/redirect");
+
 
   if (isAdminOrAuth) return null;
 

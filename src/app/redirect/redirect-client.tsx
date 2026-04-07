@@ -7,6 +7,8 @@ import { Briefcase, ExternalLink, Shield } from "lucide-react";
 import Link from "next/link";
 import CloudflareTurnstile from "@/components/cloudflare-turnstile";
 import AdUnit from "@/components/ad-unit";
+import GPTApplyAd from "@/components/gpt-apply-ad";
+
 
 export default function RedirectClient() {
   const searchParams = useSearchParams();
@@ -87,10 +89,9 @@ export default function RedirectClient() {
 
       <div className="bg-white rounded-3xl border border-[#E8E4DC] p-8 max-w-md w-full text-center shadow-xl">
         {/* Real AdSense Ad Unit for Redirect Page */}
-        <div className="bg-[#F8F6F1] rounded-xl border border-[#E8E4DC] p-4 mb-8 relative min-h-[120px] flex flex-col items-center justify-center">
-          <span className="absolute top-1.5 right-2 text-[10px] text-[#9CA3AF] font-mono uppercase tracking-tighter">Advertisement</span>
-          <AdUnit slot="1931348788" />
-        </div>
+        {/* GPT Apply Ad */}
+        <GPTApplyAd />
+
 
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-[#0F1F3D] mb-2" style={{ fontFamily: "Syne, sans-serif" }}>
