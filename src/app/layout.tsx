@@ -5,6 +5,8 @@ import { TempoInit } from "@/components/tempo-init";
 import { ThemeProvider } from "@/components/theme-provider";
 import ChatbotWidget from "@/components/chatbot-widget";
 import HeaderAdWrapper from "@/components/header-ad-wrapper";
+import GPTHeaderAd from "@/components/gpt-header-ad";
+
 
 export const metadata: Metadata = {
   title: "alfamus — Find Your Dream Job | AI-Powered Job Aggregator",
@@ -38,7 +40,11 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           {/* AdSense Top Header Ad Unit - Conditional display */}
+          {/* Top Header GPT Ad */}
+          <GPTHeaderAd />
+          {/* AdSense Top Header Ad Unit - Conditional display */}
           <HeaderAdWrapper />
+
           {children}
           <ChatbotWidget />
         </ThemeProvider>
