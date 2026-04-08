@@ -6,6 +6,7 @@ import { Search, MapPin, Filter, X, Building2, ArrowUpRight, DollarSign, Clock }
 import { createClient } from "../../../supabase/client";
 import Image from "next/image";
 import GPTDisplayAd from "@/components/gpt-display-ad";
+import GPTFeedAd from "@/components/gpt-feed-ad";
 
 
 interface Job {
@@ -295,85 +296,91 @@ export default function JobsPageClient() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {jobs.map((job, index) => (
-              <div
-                key={job.id}
-                className="group bg-white rounded-2xl border border-[#E8E4DC] hover:shadow-xl hover:-translate-y-1 hover:border-[#0D9488]/30 transition-all duration-300 fade-up overflow-hidden flex flex-col"
-                style={{ animationDelay: `${(index % 12) * 40}ms` }}
-              >
-                {/* Image Cover */}
-                <div className="relative h-40 w-full bg-[#F8F6F1] overflow-hidden">
-                  {job.featured_image ? (
-                    <Image 
-                      src={job.featured_image} 
-                      alt={job.title} 
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500" 
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      loading={index < 3 ? "eager" : "lazy"}
-                      priority={index < 3}
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#0F1F3D]/5 to-[#0D9488]/10" />
-                  )}
-                  {/* Company Logo Badge */}
-                  <div className="absolute -bottom-5 left-5 z-10">
-                    {job.company_logo ? (
-                      <div className="relative w-12 h-12 rounded-xl border-2 border-white bg-white shadow-sm overflow-hidden">
-                        <Image 
-                          src={job.company_logo} 
-                          alt={job.company} 
-                          fill
-                          className="object-cover"
-                          sizes="48px"
-                        />
-                      </div>
+              <div key={job.id} className="contents">
+                <div
+                  className="group bg-white rounded-2xl border border-[#E8E4DC] hover:shadow-xl hover:-translate-y-1 hover:border-[#0D9488]/30 transition-all duration-300 fade-up overflow-hidden flex flex-col"
+                  style={{ animationDelay: `${(index % 12) * 40}ms` }}
+                >
+                  {/* Image Cover */}
+                  <div className="relative h-40 w-full bg-[#F8F6F1] overflow-hidden">
+                    {job.featured_image ? (
+                      <Image 
+                        src={job.featured_image} 
+                        alt={job.title} 
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        loading={index < 3 ? "eager" : "lazy"}
+                        priority={index < 3}
+                      />
                     ) : (
-                      <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-sm flex items-center justify-center">
-                        <Building2 className="w-6 h-6 text-[#6B7280]" />
-                      </div>
+                      <div className="w-full h-full bg-gradient-to-br from-[#0F1F3D]/5 to-[#0D9488]/10" />
                     )}
-                  </div>
-                </div>
-
-                <div className="p-5 pt-8 flex-1 flex flex-col relative z-20 bg-white">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="text-xs text-[#6B7280] font-medium">{job.company}</div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full border font-medium font-mono ${JOB_TYPE_COLORS[job.job_type] || "bg-gray-50 text-gray-600 border-gray-200"}`}>
-                      {job.job_type}
-                    </span>
-                  </div>
-                  
-                  <h3 className="text-lg font-bold text-[#0F1F3D] mb-2 group-hover:text-[#0D9488] transition-colors leading-tight" style={{ fontFamily: "Syne, sans-serif" }}>
-                    {job.title}
-                  </h3>
-                  
-                  {job.description && (
-                    <p className="text-sm text-[#6B7280] mb-4 line-clamp-2">{job.description}</p>
-                  )}
-                  
-                  <div className="mt-auto">
-                    <div className="flex flex-wrap gap-2 mb-5">
-                      <div className="flex items-center gap-1 text-xs text-[#6B7280] bg-[#F8F6F1] px-2 py-1 rounded-md">
-                        <MapPin className="w-3 h-3" />{job.location}
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-[#6B7280] font-mono bg-[#F8F6F1] px-2 py-1 rounded-md">
-                        <DollarSign className="w-3 h-3" />{formatSalary(job.salary_min, job.salary_max)}
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-[#6B7280] font-mono bg-[#F8F6F1] px-2 py-1 rounded-md">
-                        <Clock className="w-3 h-3" /> 5 hours ago
-                      </div>
+                    {/* Company Logo Badge */}
+                    <div className="absolute -bottom-5 left-5 z-10">
+                      {job.company_logo ? (
+                        <div className="relative w-12 h-12 rounded-xl border-2 border-white bg-white shadow-sm overflow-hidden">
+                          <Image 
+                            src={job.company_logo} 
+                            alt={job.company} 
+                            fill
+                            className="object-cover"
+                            sizes="48px"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-12 h-12 rounded-xl bg-white border-2 border-white shadow-sm flex items-center justify-center">
+                          <Building2 className="w-6 h-6 text-[#6B7280]" />
+                        </div>
+                      )}
                     </div>
+                  </div>
 
+                  <div className="p-5 pt-8 flex-1 flex flex-col relative z-20 bg-white">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="text-xs text-[#6B7280] font-medium">{job.company}</div>
+                      <span className={`text-xs px-2 py-0.5 rounded-full border font-medium font-mono ${JOB_TYPE_COLORS[job.job_type] || "bg-gray-50 text-gray-600 border-gray-200"}`}>
+                        {job.job_type}
+                      </span>
+                    </div>
                     
-                    <a
-                      href={`/jobs/${job.id}`}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-transparent text-[#0F1F3D] border border-[#E8E4DC] text-sm font-semibold rounded-xl group-hover:bg-[#0D9488] group-hover:text-white group-hover:border-[#0D9488] transition-all"
-                      style={{ fontFamily: "Syne, sans-serif" }}
-                    >
-                      View Details <ArrowUpRight className="w-4 h-4" />
-                    </a>
+                    <h3 className="text-lg font-bold text-[#0F1F3D] mb-2 group-hover:text-[#0D9488] transition-colors leading-tight" style={{ fontFamily: "Syne, sans-serif" }}>
+                      {job.title}
+                    </h3>
+                    
+                    {job.description && (
+                      <p className="text-sm text-[#6B7280] mb-4 line-clamp-2">{job.description}</p>
+                    )}
+                    
+                    <div className="mt-auto">
+                      <div className="flex flex-wrap gap-2 mb-5">
+                        <div className="flex items-center gap-1 text-xs text-[#6B7280] bg-[#F8F6F1] px-2 py-1 rounded-md">
+                          <MapPin className="w-3 h-3" />{job.location}
+                        </div>
+                        <div className="flex items-center gap-1 text-xs text-[#6B7280] font-mono bg-[#F8F6F1] px-2 py-1 rounded-md">
+                          <DollarSign className="w-3 h-3" />{formatSalary(job.salary_min, job.salary_max)}
+                        </div>
+                        <div className="flex items-center gap-1 text-xs text-[#6B7280] font-mono bg-[#F8F6F1] px-2 py-1 rounded-md">
+                          <Clock className="w-3 h-3" /> 5 hours ago
+                        </div>
+                      </div>
+
+                      
+                      <a
+                        href={`/jobs/${job.id}`}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-transparent text-[#0F1F3D] border border-[#E8E4DC] text-sm font-semibold rounded-xl group-hover:bg-[#0D9488] group-hover:text-white group-hover:border-[#0D9488] transition-all"
+                        style={{ fontFamily: "Syne, sans-serif" }}
+                      >
+                        View Details <ArrowUpRight className="w-4 h-4" />
+                      </a>
+                    </div>
                   </div>
                 </div>
+                {(index + 1) % 3 === 0 && (
+                  <div className="col-span-full">
+                    <GPTFeedAd index={Math.floor(index / 3)} />
+                  </div>
+                )}
               </div>
             ))}
           </div>
