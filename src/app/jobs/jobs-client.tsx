@@ -6,8 +6,6 @@ import { Search, MapPin, Filter, X, Building2, ArrowUpRight, DollarSign, Clock }
 import { createClient } from "../../../supabase/client";
 import Image from "next/image";
 import GPTDisplayAd from "@/components/gpt-display-ad";
-import GPTFeedAd from "@/components/gpt-feed-ad";
-
 
 interface Job {
   id: string;
@@ -254,7 +252,6 @@ export default function JobsPageClient() {
           )}
         </div>
       </div>
-      
       <GPTDisplayAd />
 
 
@@ -376,11 +373,6 @@ export default function JobsPageClient() {
                     </div>
                   </div>
                 </div>
-                {(index + 1) % 3 === 0 && (
-                  <div className="col-span-full">
-                    <GPTFeedAd index={Math.floor(index / 3)} />
-                  </div>
-                )}
               </div>
             ))}
           </div>
