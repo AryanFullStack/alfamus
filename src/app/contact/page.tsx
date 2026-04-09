@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
 import {
   Mail,
@@ -69,9 +68,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
-      <SiteNavbar />
-      <div className="pt-16">
-        {/* Hero */}
+      {/* Hero */}
         <div className="py-20 relative overflow-hidden" style={{ backgroundColor: "#0F1F3D" }}>
           <div
             className="absolute inset-0 opacity-10"
@@ -384,7 +381,6 @@ export default function ContactPage() {
             </div>
           </div>
         </div>
-      </div>
       <SiteFooter />
     </div>
   );

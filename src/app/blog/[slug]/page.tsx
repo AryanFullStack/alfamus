@@ -1,5 +1,4 @@
 import { createClient } from "../../../../supabase/server";
-import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -38,9 +37,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
-      <SiteNavbar />
-      <div className="pt-16">
-        {/* Hero image */}
+      {/* Hero image */}
         <div className="relative h-72 md:h-96 overflow-hidden bg-[#0F1F3D]">
           {post.featured_image && (
             <Image
@@ -179,7 +176,6 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           )}
         </div>
-      </div>
       <SiteFooter />
     </div>
   );

@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import ChatbotWidget from "@/components/chatbot-widget";
 import HeaderAdWrapper from "@/components/header-ad-wrapper";
 import GPTHeaderAd from "@/components/gpt-header-ad";
+import SiteNavbar from "@/components/site-navbar";
 
 
 export const metadata: Metadata = {
@@ -42,6 +43,10 @@ export default async function RootLayout({
           {/* AdSense Top Header Ad Unit - Conditional display */}
           {/* Top Header GPT Ad */}
           <GPTHeaderAd />
+          
+          {/* Navigation Header */}
+          <SiteNavbar />
+
           {/* AdSense Top Header Ad Unit - Conditional display */}
           <HeaderAdWrapper />
 

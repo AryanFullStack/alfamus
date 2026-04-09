@@ -1,4 +1,3 @@
-import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
 import Link from "next/link";
 import { ArrowUpRight, CheckCircle2, Calculator, FileText, BookOpen, Target, TrendingUp, Briefcase, Clock, Star } from "lucide-react";
@@ -108,9 +107,7 @@ const SALARY_DATA: Record<string, Record<string, { min: number; max: number; med
 export default function CareerToolsPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
-      <SiteNavbar />
-      <div className="pt-16">
-        {/* Hero */}
+      {/* Hero */}
         <div className="bg-[#0F1F3D] py-20">
           <div className="container mx-auto px-4 text-center">
             <span className="text-[#0D9488] text-sm font-semibold uppercase tracking-widest" style={{ fontFamily: "Syne, sans-serif" }}>Career Tools</span>
@@ -255,7 +252,6 @@ export default function CareerToolsPage() {
             </div>
           </div>
         </div>
-      </div>
       <SiteFooter />
     </div>
   );

@@ -24,13 +24,23 @@ export default function SiteNavbar() {
   const forceSolid = !isHomePage;
   const isSolid = scrolled || forceSolid;
 
+  // Hide Navbar on admin and auth pages
+  const isAdminOrAuth = 
+    pathname?.startsWith("/admin") || 
+    pathname?.startsWith("/auth") || 
+    pathname?.startsWith("/sign-in") || 
+    pathname?.startsWith("/sign-up") ||
+    pathname?.startsWith("/dashboard");
+
+  if (isAdminOrAuth) return null;
+
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`transition-all duration-500 ${
           isSolid
-            ? "bg-[#0F1F3D]/95 backdrop-blur-xl border-b border-white/10 shadow-lg py-2"
-            : "bg-[#0F1F3D]/30 backdrop-blur-[2px] py-4"
+            ? "bg-[#0F1F3D] border-b border-white/10 shadow-lg py-2"
+            : "bg-[#0F1F3D]/95 py-4"
         }`}
       >
         <div className="container mx-auto px-4 flex items-center justify-between">

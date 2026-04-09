@@ -1,6 +1,5 @@
 import { createClient } from "../../../../supabase/server";
 import { notFound } from "next/navigation";
-import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
 import { MapPin, Building2, DollarSign, Briefcase, ExternalLink, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
@@ -36,9 +35,8 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#F8F6F1" }}>
-      <SiteNavbar />
       
-      <main className="flex-1 pt-24 pb-20">
+      <main className="flex-1 pb-20">
         <div className="container mx-auto px-4 max-w-5xl">
           {/* Back button */}
           <div className="mb-6">

@@ -1,5 +1,4 @@
 import { createClient } from "../../../supabase/server";
-import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
 import Link from "next/link";
 import { Clock, ArrowUpRight } from "lucide-react";
@@ -25,9 +24,7 @@ export default async function BlogPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
-      <SiteNavbar />
-      <div className="pt-16">
-        {/* Header */}
+      {/* Header */}
         <div className="bg-[#0F1F3D] py-20">
           <div className="container mx-auto px-4 text-center">
             <span className="text-[#0D9488] text-sm font-semibold uppercase tracking-widest">Career Insights</span>
@@ -122,7 +119,6 @@ export default async function BlogPage() {
             </div>
           )}
         </div>
-      </div>
       <SiteFooter />
     </div>
   );

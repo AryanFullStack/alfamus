@@ -167,7 +167,7 @@ export default function JobsPageClient() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
       {/* Header bar */}
-      <div className="sticky top-0 z-40 bg-white border-b border-[#E8E4DC] shadow-sm">
+      <div className="bg-white border-b border-[#E8E4DC] shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex gap-3">
             {/* Search */}

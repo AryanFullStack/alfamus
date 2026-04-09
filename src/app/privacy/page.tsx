@@ -1,4 +1,3 @@
-import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
 import type { Metadata } from "next";
 
@@ -238,9 +237,7 @@ We are committed to resolving any complaints or concerns about our privacy pract
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
-      <SiteNavbar />
-      <div className="pt-16">
-        <div className="py-20" style={{ backgroundColor: "#0F1F3D" }}>
+      <div className="py-20" style={{ backgroundColor: "#0F1F3D" }}>
           <div className="container mx-auto px-4">
             <h1
               className="text-5xl font-bold text-white"
@@ -316,7 +313,6 @@ We are committed to resolving any complaints or concerns about our privacy pract
             </div>
           </div>
         </div>
-      </div>
       <SiteFooter />
     </div>
   );

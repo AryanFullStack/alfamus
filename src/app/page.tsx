@@ -1,5 +1,4 @@
 import { createClient } from "../../supabase/server";
-import SiteNavbar from "@/components/site-navbar";
 import HeroSection from "@/components/hero-section";
 import AiPicksStrip from "@/components/ai-picks-strip";
 import FeaturedJobsGrid from "@/components/featured-jobs-grid";
@@ -74,7 +73,6 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
-      <SiteNavbar />
       <main>
         <HeroSection totalJobs={totalJobs ?? 0} />
         <FeaturedJobsGrid jobs={Array.from(new Map((recentJobs || []).map((j: any) => [j.id, j])).values()) as any} title="Fresh Opportunities" subtitle="Recently Added Jobs" />

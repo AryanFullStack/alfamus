@@ -1,4 +1,3 @@
-import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
 import { Users, Target, Zap, Globe, Heart, Award } from "lucide-react";
 import type { Metadata } from "next";
@@ -73,9 +72,7 @@ const team = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
-      <SiteNavbar />
-      <div className="pt-16">
-        {/* Hero */}
+      {/* Hero */}
         <div
           className="py-24 relative overflow-hidden"
           style={{ backgroundColor: "#0F1F3D" }}
@@ -264,7 +261,6 @@ export default function AboutPage() {
             </a>
           </div>
         </div>
-      </div>
       <SiteFooter />
     </div>
   );

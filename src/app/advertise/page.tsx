@@ -1,4 +1,3 @@
-import SiteNavbar from "@/components/site-navbar";
 import SiteFooter from "@/components/site-footer";
 import { TrendingUp, Users, Globe, Zap, CheckCircle, Mail } from "lucide-react";
 import type { Metadata } from "next";
@@ -71,9 +70,7 @@ const packages = [
 export default function AdvertisePage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
-      <SiteNavbar />
-      <div className="pt-16">
-        {/* Hero */}
+      {/* Hero */}
         <div className="py-24 relative overflow-hidden" style={{ backgroundColor: "#0F1F3D" }}>
           <div
             className="absolute inset-0 opacity-10"
@@ -281,7 +278,6 @@ export default function AdvertisePage() {
             </a>
           </div>
         </div>
-      </div>
       <SiteFooter />
     </div>
   );
