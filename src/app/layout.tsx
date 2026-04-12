@@ -4,8 +4,6 @@ import Script from "next/script";
 import { TempoInit } from "@/components/tempo-init";
 import { ThemeProvider } from "@/components/theme-provider";
 import ChatbotWidget from "@/components/chatbot-widget";
-import HeaderAdWrapper from "@/components/header-ad-wrapper";
-import GPTHeaderAd from "@/components/gpt-header-ad";
 import SiteNavbar from "@/components/site-navbar";
 
 
@@ -40,15 +38,8 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* AdSense Top Header Ad Unit - Conditional display */}
-          {/* Top Header GPT Ad */}
-          <GPTHeaderAd />
-          
           {/* Navigation Header */}
           <SiteNavbar />
-
-          {/* AdSense Top Header Ad Unit - Conditional display */}
-          <HeaderAdWrapper />
 
           {children}
           <ChatbotWidget />
@@ -59,13 +50,6 @@ export default async function RootLayout({
           src="https://challenges.cloudflare.com/turnstile/v0/api.js"
           async
           defer
-        />
-        {/* Google AdSense Script - Auto ads on every page */}
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7011484437531877"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
         {/* Google Analytics Script */}
         {GA_ID && (

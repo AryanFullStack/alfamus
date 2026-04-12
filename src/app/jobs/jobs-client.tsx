@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Search, MapPin, Filter, X, Building2, ArrowUpRight, DollarSign, Clock } from "lucide-react";
 import { createClient } from "../../../supabase/client";
 import Image from "next/image";
-import GPTDisplayAd from "@/components/gpt-display-ad";
 
 interface Job {
   id: string;
@@ -252,8 +251,6 @@ export default function JobsPageClient() {
           )}
         </div>
       </div>
-      <GPTDisplayAd />
-
 
       {/* Results */}
       <div className="container mx-auto px-4 py-10">

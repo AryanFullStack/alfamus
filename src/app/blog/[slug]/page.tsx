@@ -109,14 +109,6 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Sidebar */}
             <div className="lg:col-span-1 space-y-6">
-              {/* Ad unit */}
-              <div className="bg-white rounded-2xl border border-[#E8E4DC] p-4 relative">
-                <span className="absolute top-2 right-3 text-xs text-[#6B7280] font-mono">Sponsored</span>
-                <div className="h-32 bg-[#F8F6F1] rounded-xl flex items-center justify-center text-xs text-[#6B7280]">
-                  Advertisement
-                </div>
-              </div>
-
               {/* Find Jobs CTA */}
               <div className="bg-[#0F1F3D] rounded-2xl p-6 text-white">
                 <h3 className="font-bold text-lg mb-2" style={{ fontFamily: "Syne, sans-serif" }}>

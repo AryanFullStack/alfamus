@@ -351,11 +351,11 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
       showToast("Name and Slot are required", "error");
       return;
     }
-    const payload = { 
-      name: unit.name, 
-      slot: unit.slot, 
-      ad_code: unit.ad_code, 
-      is_active: unit.is_active 
+    const payload = {
+      name: unit.name,
+      slot: unit.slot,
+      ad_code: unit.ad_code,
+      is_active: unit.is_active
     };
 
     if (unit.id) {
@@ -1360,4 +1360,4 @@ export default function AdminDashboardClient({ user, stats: initialStats, recent
       </main>
     </div>
   );
-}
+}

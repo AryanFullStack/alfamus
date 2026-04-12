@@ -2,7 +2,6 @@ import { createClient } from "../../supabase/server";
 import HeroSection from "@/components/hero-section";
 import AiPicksStrip from "@/components/ai-picks-strip";
 import FeaturedJobsGrid from "@/components/featured-jobs-grid";
-import AdBanner from "@/components/ad-banner";
 import BlogPreviewSection from "@/components/blog-preview-section";
 import CategoryExplorer from "@/components/category-explorer";
 import SiteFooter from "@/components/site-footer";
@@ -79,7 +78,6 @@ export default async function Home() {
         <FeaturedJobsGrid jobs={Array.from(new Map((featuredJobs || []).map((j: any) => [j.id, j])).values()) as any} title="Hand-Picked Opportunities" subtitle="Featured Roles" />
         <FeaturedJobsGrid jobs={Array.from(new Map((unskilledJobs || []).map((j: any) => [j.id, j])).values()) as any} title="Unskilled & Entry-Level Roles" subtitle="Start Working Quickly" />
         <AiPicksStrip jobs={Array.from(new Map((aiPicks || []).map((j: any) => [j.id, j])).values()) as any} />
-        <AdBanner />
         <BlogPreviewSection posts={blogPosts ?? []} />
         <CategoryExplorer />
       </main>
