@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import ChatbotWidget from "@/components/chatbot-widget";
 import SiteNavbar from "@/components/site-navbar";
 import HeaderAd from "@/components/header-ad";
+import InterstitialAd from "@/components/interstitial-ad";
+import AnchorAd from "@/components/anchor-ad";
 
 
 export const metadata: Metadata = {
@@ -41,6 +43,10 @@ export default async function RootLayout({
         >
           {/* Header Advertisement */}
           <HeaderAd />
+          {/* Interstitial Advertisement */}
+          <InterstitialAd />
+          {/* Anchor Advertisement */}
+          <AnchorAd />
           {/* Navigation Header */}
           <SiteNavbar />
 
