@@ -5,6 +5,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Search, MapPin, Filter, X, Building2, ArrowUpRight, DollarSign, Clock } from "lucide-react";
 import { createClient } from "../../../supabase/client";
 import Image from "next/image";
+import JobsHeaderAd from "@/components/jobs-header-ad";
+import JobsBeforeListingsAd from "@/components/jobs-before-listings-ad";
 
 interface Job {
   id: string;
@@ -163,6 +165,7 @@ export default function JobsPageClient() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F8F6F1" }}>
+      <JobsHeaderAd />
       {/* Header bar */}
       <div className="bg-white border-b border-[#E8E4DC] shadow-sm">
         <div className="container mx-auto px-4 py-4">
@@ -251,6 +254,8 @@ export default function JobsPageClient() {
           )}
         </div>
       </div>
+
+      <JobsBeforeListingsAd />
 
       {/* Results */}
       <div className="container mx-auto px-4 py-10">

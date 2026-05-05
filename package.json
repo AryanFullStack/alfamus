@@ -67,6 +67,7 @@
     "@types/node": "^20",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
+    "baseline-browser-mapping": "^2.10.27",
     "postcss": "^8",
     "tailwind-merge": "^2",
     "tailwindcss": "^3",

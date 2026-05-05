@@ -5,7 +5,7 @@ import { TempoInit } from "@/components/tempo-init";
 import { ThemeProvider } from "@/components/theme-provider";
 import ChatbotWidget from "@/components/chatbot-widget";
 import SiteNavbar from "@/components/site-navbar";
-import GoogleAd from "@/components/google-ad";
+import HeaderAd from "@/components/header-ad";
 
 
 export const metadata: Metadata = {
@@ -39,9 +39,10 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* Header Advertisement */}
+          <HeaderAd />
           {/* Navigation Header */}
           <SiteNavbar />
-          <GoogleAd />
 
           {children}
           <ChatbotWidget />
@@ -70,13 +71,6 @@ export default async function RootLayout({
             </Script>
           </>
         )}
-        {/* Google AdSense Script */}
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7011484437531877"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );
